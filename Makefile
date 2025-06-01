@@ -8,13 +8,13 @@ CXX = g++
 CXX_FLAGS = -std=c++23 -Wall -Werror -pedantic -ggdb -O0
 PROGRAM = hollow-sphere-ascii
 
-$(PROGRAM) : $(PROGRAM).cpp
+$(PROGRAM): $(PROGRAM).cpp
 	$(CXX) $(CXX_FLAGS) $< -o $@
 
-run : $(PROGRAM)
+run: $(PROGRAM)
 	./$(PROGRAM)
 
-.PHONY : clean
+.PHONY: clean
 
 clean:
 	rm -f $(PROGRAM)

@@ -34,7 +34,7 @@ struct Vertex {
 };
 
 void clearScreen() noexcept {
-	std::cout << "\x1b[2J\x1b[32m";
+	std::cout << "\x1b[2J";
 }
 
 void resetCursor() noexcept {
@@ -82,16 +82,19 @@ void writeVertex(const Vertex& vertex, const char& character) noexcept {
 	int yProjection = static_cast<int>(SCREEN_DISTANCE * OOZ * -vertex.y); // positive y axis goes downward, so y is inverted here
 	xProjection += static_cast<int>(X_OFFSET);
 	yProjection += static_cast<int>(Y_OFFSET);
-	int idx = xProjection+ yProjection * SCREEN_WIDTH;
+	int idx = xProjection + yProjection * SCREEN_WIDTH;
 	if (idx >= 0 && idx < SCREEN_SIZE && OOZ > depthBuffer[idx]) { // depth test
-        depthBuffer[idx] = OOZ;
-    	frameBuffer[idx] = character;
+		depthBuffer[idx] = OOZ;
+		frameBuffer[idx] = character;
 	}
 }
 
 void renderFramebuffer() noexcept {
-	for (int i = 0; i < SCREEN_SIZE; i++)
-		std::cout << (i % SCREEN_WIDTH ? frameBuffer[i] : '\n');	
+	for (int i = 0; i < SCREEN_SIZE; i++) {
+		std::cout << frameBuffer[i];
+		if (i % SCREEN_WIDTH == SCREEN_WIDTH - 1)
+			std::cout << std::endl;
+	}
 }
 
 void initRing(const float& yawOffset, const char& character) noexcept {
@@ -110,7 +113,7 @@ void initRing(const float& yawOffset, const char& character) noexcept {
 
 void initSphere() noexcept {
 	initRing(0.0f, '@');
-    initRing(degreesToRadians(45.0f), '$');
+	initRing(degreesToRadians(45.0f), '$');
 	initRing(degreesToRadians(90.0f), '*');
 	initRing(degreesToRadians(135.0f), '!');
 }
